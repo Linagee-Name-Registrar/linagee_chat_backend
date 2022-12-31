@@ -2,7 +2,8 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/sig2": "pages/sig2.js",
+  "/signin": "pages/signin.js",
+  "/api/moralis/[...moralis]": "pages/api/moralis/[...moralis].js",
   "/api/auth/[...nextauth]": "pages/api/auth/[...nextauth].js",
   "/user": "pages/user.js"
 }

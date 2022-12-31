@@ -8,68 +8,9 @@ import crypto from 'crypto';
 import CryptoJS from 'crypto-js';
 import contractInterface from '../lib/resolverabi.json';
 import { ethers } from "ethers";
-
-
-function User({ user, bio }) {
-
-
-    const [value, changeValue] = useState("New Bio");
-    
-
-    async function updateBio(){
-        const {data} = await axios.post(
-            "/api/updateBio",
-            { profileId: user.profileId, bio: value },
-            {
-              headers: {
-                "content-type": "application/json",
-              },
-            }
-          );
-
-          console.log("Bio Updated to: " + data.bio)
-
-          location.reload()
-    }
-
-    async function getPerson(){
-        const ugh = await axios.post(
-            "/api/getUser",
-            { addr: user.address },
-            {
-              headers: {
-                "content-type": "application/json",
-              },
-            }
-          );
-          console.log('Person is', ugh)
-
-    }
-
-
-
-
-    return (
-        <div className="page">
-            <div className="container">
-            <h4>User session:</h4>
-            <div>Address: {user.address}</div>
-            <div>Bio: {bio}</div>
-            <br/>
-            <input
-                onChange={(e) => changeValue(e.target.value)}
-                value={value}
-            ></input>
-            <button onClick={() => updateBio()}>Update Bio</button>
-            <button onClick={() => getPerson()}>getPerson</button>
-            <br />
-            <br/>
-            <button onClick={() => signOut({ redirect: '/signin' })}>Sign out</button>
-            </div>
-        </div>
-    );
-}
-
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import { useAccount, useNetwork, useSignMessage, useDisconnect } from 'wagmi'
 
 export async function getPrimary(address){
     // const contractConfig = {
@@ -148,6 +89,8 @@ export async function getServerSideProps(context) {
 
     await Users.findOneAndUpdate({ profileId: session?.user.profileId }, {addr: (session?.user.address).toString()});
 
+    var resolvedName = null
+
     if(session.user.address) {
 
         var primaryName = await getPrimary((session.user.address).toString())
@@ -156,6 +99,7 @@ export async function getServerSideProps(context) {
           if(primaryName){
 
             await Users.findOneAndUpdate({ profileId: session?.user.profileId }, {primary: primaryName});
+            var resolvedName = primaryName;
             console.log("updated name")
 
           }
@@ -200,10 +144,82 @@ export async function getServerSideProps(context) {
     //   );
 
     return {
-        props: { user: session.user, bio: userM.bio },
+        props: { user: session.user, bio: userM.bio, primary: resolvedName },
     };
 
 
 }
+
+function User({ user, bio, primary }) {
+
+    const { disconnect } = useDisconnect();
+    const [value, changeValue] = useState("New Bio");
+    
+
+    async function updateBio(){
+        const {data} = await axios.post(
+            "/api/updateBio",
+            { profileId: user.profileId, bio: value },
+            {
+              headers: {
+                "content-type": "application/json",
+              },
+            }
+          );
+
+          console.log("Bio Updated to: " + data.bio)
+
+          location.reload()
+    }
+
+    async function getPerson(){
+        const ugh = await axios.post(
+            "/api/getUser",
+            { addr: user.address },
+            {
+              headers: {
+                "content-type": "application/json",
+              },
+            }
+          );
+          console.log('Person is', ugh)
+
+    }
+
+    const handleSignOut = () =>{
+        disconnect();
+        signOut({ redirect: '/signin' })
+    }
+
+
+
+    return (
+        <div className="page">
+            <div className="container">
+                <div className="auth">
+            <h1>Linagee Chat</h1>
+            <br/>
+            {primary && (<> <h3>{primary}</h3><br/></>)}
+            <div>Address: {user.address}</div>
+
+            {/* <div>Bio: {bio}</div>
+            <br/>
+            <TextField
+                color="primary"
+                onChange={(e) => changeValue(e.target.value)}
+                value={value}
+            ></TextField>
+            <br/>
+            <Button variant="outlined"  onClick={() => updateBio()}>Update Bio</Button> */}
+            {/* <Button onClick={() => getPerson()}>getPerson</Button> */}
+           
+            <br/>
+            <Button variant="contained"onClick={handleSignOut}>Sign out</Button>
+            </div>
+            </div>
+        </div>
+    );
+}
+
 
 export default User;

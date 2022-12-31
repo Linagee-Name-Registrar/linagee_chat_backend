@@ -25,10 +25,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/sig2": [
+    "/signin": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/sig2.js"
+      "static/chunks/pages/signin.js"
     ],
     "/user": [
       "static/chunks/webpack.js",
