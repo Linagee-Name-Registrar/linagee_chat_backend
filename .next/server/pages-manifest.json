@@ -2,8 +2,6 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/signin": "pages/signin.js",
-  "/api/moralis/[...moralis]": "pages/api/moralis/[...moralis].js",
-  "/api/auth/[...nextauth]": "pages/api/auth/[...nextauth].js",
-  "/user": "pages/user.js"
+  "/api/getUser": "pages/api/getUser.js",
+  "/": "pages/index.js"
 }
