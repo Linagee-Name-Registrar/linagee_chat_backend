@@ -11,7 +11,6 @@ export default async (req, res) => {
 console.log('ugh')
 
     
-
     const { ext } = req.body;
     await connectDB();
 

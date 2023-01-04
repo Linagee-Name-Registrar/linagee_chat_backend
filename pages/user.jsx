@@ -199,6 +199,8 @@ function User({ user, bio, primary }) {
                 <div className="auth">
             <h1>Linagee Chat</h1>
             <br/>
+            You may now use the chat extension!
+            <br/>
             {primary && (<> <h3>{primary}</h3><br/></>)}
             <div>Address: {user.address}</div>
 
